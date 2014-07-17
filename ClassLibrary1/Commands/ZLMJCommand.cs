@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Colors;
 
 namespace ZLPlugin.Commands
 {
@@ -33,12 +34,14 @@ namespace ZLPlugin.Commands
                             {
                                 txtContent = formatTxt((txt as MText).Contents);
                                 txtContent += area.ToString();
+                                (txt as MText).Color = Color.FromRgb(0xFF, 0xFF, 0xFF);
                                 (txt as MText).Contents = txtContent;
                             }
                             else if (txt.GetType() == typeof(DBText))
                             {
                                 txtContent = formatTxt((txt as DBText).TextString);
                                 txtContent += area.ToString();
+                                (txt as DBText).Color = Color.FromRgb(0xFF, 0xFF, 0xFF);
                                 (txt as DBText).TextString = txtContent;
                             }
                         }

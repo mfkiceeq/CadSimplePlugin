@@ -25,6 +25,7 @@ namespace ZLPlugin.Commands
                     list1.Add(list2);
                 }
                 list1.Add(new List<object>(new string[] { "5", "6" }));
+                list1.Add(new List<object>(new string[] { "TestComand", "Num" }));
                 acTrans.Commit();
                 acTrans.Dispose();
             }

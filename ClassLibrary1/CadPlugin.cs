@@ -106,6 +106,7 @@ namespace ZLPlugin
         {
             List<Entity> entities = new List<Entity>();
             Point3d startLoction = location.Add(new Vector3d(0,0,0));
+            int fontHeight = 100;
             
             if (result.GetType() == typeof(BlockReference))
             {
@@ -121,11 +122,11 @@ namespace ZLPlugin
                     entities.AddRange(getResultEntitys(item, textStyle, location));
                     if (item is IEnumerable && !(item is string))
                     {
-                        location = location.Add(new Vector3d(0, -100, 0));
+                        location = location.Add(new Vector3d(0, -fontHeight*1.2, 0));
                     }
                     else
                     {
-                        location = location.Add(new Vector3d(100, 0, 0));
+                        location = location.Add(new Vector3d(fontHeight*8, 0, 0));
                     }
                 }
             }
@@ -133,6 +134,7 @@ namespace ZLPlugin
             {
                 logToEditor("Result is String" + result);
                 MText objText = new MText();
+                objText.TextHeight = fontHeight ;
                 objText.SetDatabaseDefaults();
                 objText.Location = startLoction;
                 objText.Contents = result.ToString();
