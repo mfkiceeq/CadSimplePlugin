@@ -21,6 +21,7 @@ namespace ZLPlugin
         [CommandMethod("qm")]
         public void qmCommand()
         {
+            if (TimeUtil.checkOutOfTime()) return;
             FileUtil.initTreeInfo();
             BasicCommand command = new ZLQMCommand();
             logToCadText(command.excute().result);
@@ -30,13 +31,15 @@ namespace ZLPlugin
         [CommandMethod("gm")]
         public void MethodSumAllText()
         {
+            if (TimeUtil.checkOutOfTime()) return;
             BasicCommand command = new ZLQHCommand();
-            logToCadText(command.excute().ToString());
+            logToCadText(command.excute().result);
         }
         
         [CommandMethod("dy")]
         public void dyCommand()
         {
+            if (TimeUtil.checkOutOfTime()) return;
             BasicCommand command = new ZLDYCommand();
             command.excute();
         }
@@ -45,6 +48,7 @@ namespace ZLPlugin
         [CommandMethod("fg")]
         public void mjCommand()
         {
+            if (TimeUtil.checkOutOfTime()) return;
             BasicCommand command = new ZLMJCommand();
             command.excute();
         }
@@ -52,6 +56,7 @@ namespace ZLPlugin
         [CommandMethod("Test")]
         public void testCommand()
         {
+            if (TimeUtil.checkOutOfTime()) return;
             FileUtil.initTreeInfo();
             BasicCommand command = new TestCommand();
             logToCadText(command.excute().result);
@@ -106,7 +111,7 @@ namespace ZLPlugin
         {
             List<Entity> entities = new List<Entity>();
             Point3d startLoction = location.Add(new Vector3d(0,0,0));
-            int fontHeight = 100;
+            int fontHeight = 500;
             
             if (result.GetType() == typeof(BlockReference))
             {
@@ -122,7 +127,7 @@ namespace ZLPlugin
                     entities.AddRange(getResultEntitys(item, textStyle, location));
                     if (item is IEnumerable && !(item is string))
                     {
-                        location = location.Add(new Vector3d(0, -fontHeight*1.2, 0));
+                        location = location.Add(new Vector3d(0, -fontHeight*4, 0));
                     }
                     else
                     {

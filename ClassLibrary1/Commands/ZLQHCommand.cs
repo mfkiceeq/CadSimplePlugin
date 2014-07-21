@@ -82,13 +82,25 @@ namespace ZLPlugin.Commands
 
                         }
                     }
+
                     string sumResult = "";
                     foreach (string key in sumDict.Keys)
                     {
                         sumResult += key + ":" + sumDict[key] + "\n";
                     }
+
+                    List<object> tempList;
+                    List<List<object>> exResult = new List<List<object>>();
+                    foreach (string key in sumDict.Keys)
+                    {
+                        tempList = new List<object>();
+                        tempList.Add(key);
+                        tempList.Add(sumDict[key]);
+                        //result += key + ":" + sumDict[key] + "\n";
+                        exResult.Add(tempList);
+                    }
                     acTrans.Commit();
-                    return new Result(sumResult);
+                    return new Result(exResult);
                 }
             }
             return new Result("未选择目标");
