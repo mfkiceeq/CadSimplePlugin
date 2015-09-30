@@ -8,20 +8,54 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Colors;
 
-
 using ZLPlugin.Commands;
 using Autodesk.AutoCAD.Geometry;
 using System.Collections;
+using Autodesk.AutoCAD;
 [assembly:CommandClass(typeof(ZLPlugin.CadPlugin))]
 namespace ZLPlugin
 {
     public class CadPlugin
     {
+        public const int FREE_USE_TIME = 30;
+
+        public bool canUse = false;
+
+        public bool isPrivate = false;
+
+        public CadPlugin()
+        {
+            if (KeyUtil.checkRegisted())
+            {
+                if (TimeUtil.checkOutOfTime())
+                {
+                    canUse = false;
+                }
+                else
+                {
+                    canUse = true;
+                }
+            }
+            else
+            {
+                if (!KeyUtil.checkUseTimeOut())
+                {
+                    canUse = true;
+                    int useTime = KeyUtil.addUseTime();
+                    logToEditor("未注册版，还可免费体验" + (FREE_USE_TIME - useTime + 1) + "次");
+                }
+                else
+                {
+                    canUse = false;
+                }
+            }
+        }
+
         //乔木命令：统计所有选中块的数目
         [CommandMethod("qm")]
         public void qmCommand()
         {
-            if (TimeUtil.checkOutOfTime()) return;
+            if (!checkCanUse()) return;
             FileUtil.initTreeInfo();
             BasicCommand command = new ZLQMCommand();
             logToCadText(command.excute().result);
@@ -31,7 +65,7 @@ namespace ZLPlugin
         [CommandMethod("gm")]
         public void MethodSumAllText()
         {
-            if (TimeUtil.checkOutOfTime()) return;
+            if (!checkCanUse()) return;
             BasicCommand command = new ZLQHCommand();
             logToCadText(command.excute().result);
         }
@@ -39,7 +73,7 @@ namespace ZLPlugin
         [CommandMethod("dy")]
         public void dyCommand()
         {
-            if (TimeUtil.checkOutOfTime()) return;
+            if (!checkCanUse()) return;
             BasicCommand command = new ZLDYCommand();
             command.excute();
         }
@@ -48,20 +82,67 @@ namespace ZLPlugin
         [CommandMethod("fg")]
         public void mjCommand()
         {
-            if (TimeUtil.checkOutOfTime()) return;
+            if (!checkCanUse()) return;
             BasicCommand command = new ZLMJCommand();
             command.excute();
         }
 
-        [CommandMethod("Test")]
+        [CommandMethod("zcm")]
+        public void keyGenCommand()
+        {
+            if (!isPrivate)
+            {
+                return;
+            }
+            KeyGenForm rForm = new KeyGenForm();
+            Application.ShowModelessDialog(rForm);
+        }
+
         public void testCommand()
         {
+            return;
+            RegisterForm rForm = new RegisterForm();
+            Application.ShowModelessDialog(rForm);
+            logToEditor(KeyUtil.GetDiskVolumeSeriaNumber());
+            logToEditor(KeyUtil.GetCpu());
+            logToEditor(KeyUtil.GetMNum());
+            logToEditor(KeyUtil.GetRegisterKey(KeyUtil.GetMNum()));
+            return;
             if (TimeUtil.checkOutOfTime()) return;
             FileUtil.initTreeInfo();
             BasicCommand command = new TestCommand();
             logToCadText(command.excute().result);
         }
 
+        protected bool checkCanUse()
+        {
+            if (this.canUse)
+            {
+                return true;
+            }
+            else
+            {
+                if (KeyUtil.checkRegisted())
+                {
+                    if (TimeUtil.checkOutOfTime())
+                    {
+                        canUse = false;
+                    }
+                    else
+                    {
+                        canUse = true;
+                    }
+                    return canUse;
+                }
+                else
+                {
+                    canUse = false;
+                }
+                Application.ShowModelessDialog(new RegisterForm());
+            }
+            logToEditor("请输入注册码");
+            return canUse;
+        }
         public static void logToEditor(string value)
         {
             Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(value + "\n");

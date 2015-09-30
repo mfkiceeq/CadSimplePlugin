@@ -41,6 +41,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -49,10 +52,23 @@
   <ItemGroup>
     <Compile Include="CadPlugin.cs" />
     <Compile Include="BasicCommand.cs" />
-    <Compile Include="Commands\Constants.cs" />
-    <Compile Include="Commands\FileUtil.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="KeyGenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyGenForm.Designer.cs">
+      <DependentUpon>KeyGenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterForm.Designer.cs">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="utils\FileUtil.cs" />
     <Compile Include="Commands\TestCommand.cs" />
-    <Compile Include="Commands\TimeUtil.cs" />
+    <Compile Include="utils\KeyUtil.cs" />
+    <Compile Include="utils\TimeUtil.cs" />
     <Compile Include="Commands\ZLDYCommand.cs" />
     <Compile Include="Commands\ZLMJCommand.cs" />
     <Compile Include="Commands\ZLQHCommand.cs" />
@@ -83,7 +99,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\NewFolder1\" />
+    <EmbeddedResource Include="KeyGenForm.resx">
+      <DependentUpon>KeyGenForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegisterForm.resx">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
